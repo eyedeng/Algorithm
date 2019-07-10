@@ -8,18 +8,18 @@ int mincostTickets(vector<int>& days, vector<int>& costs)
     dp[0] = 0;    // no day no cost
     vector<int> travel(days.back()+1, 0);
     for(int d:days)
-        travel[d] = 1;    // ±ê¼ÇÎªtravel
+        travel[d] = 1;    // æ ‡è®°ä¸ºtravel
 
     for(int i=1; i<dp.size(); i++)
     {
         if(!travel[i])
         {
-            dp[i] = dp[i-1];  // cost ²»±ä
+            dp[i] = dp[i-1];  // cost ä¸å˜
             continue;
         }
         for(int j=0; j<3; j++)
         {
-            //                  µÚ i-day[j]..i ÕâÐ©Ìì»¨ costs[j]
+            //                  ç¬¬ i-day[j]..i è¿™äº›å¤©èŠ± costs[j]
             //cout<<i<<" "<<dp[max(0,i-day[j])]+ costs[j];
             dp[i] = min( dp[i], dp[max(0,i-day[j])]+ costs[j] );
             //cout<<" "<<dp[i]<<endl;
