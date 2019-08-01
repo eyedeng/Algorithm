@@ -133,6 +133,122 @@ int main()
     return 0;
 }
 
+// 函数封装
+#define MAX 100
+int dp[MAX];
+int N =4;
+int W = 6;
+void knapsack01(int w,int v)
+{
+    for(int j=W; j>=w; j--)  // 逆序迭代j以防止多次使用物品i
+    {
+        dp[j] = max(dp[j], dp[j-w]+v);
+    }
+}
+void knapsackComp(int w, int v)
+{
+    for(int j=w; j<=W; j++)
+    {
+        dp[j] = max(dp[j], dp[j-w]+v);
+    }
+}
+int main()
+{
+    int w[] = {-1,1,2, 3,2};
+    int v[] = {-1,4,6,12,7};
+    for(int i=1; i<=N; i++)  // 对每件物品
+    {
+        knapsack01(w[i], v[i]);
+    }
+    for(int i=1; i<=W; i++)
+        cout<<dp[i]<<" ";
+	return 0;
+}
+
 // 多重背包
+#define MAX 100
+int W;
+int N;
+int dp[MAX];
+int main()
+{
+    W = 8;
+    N = 2;
+    int w[] = {-1,2  ,  4};
+    int v[] = {-1,100,100};
+    int n[] = {-1,4, 2};
+    int left;
+    for(int i=1; i<=N; i++)
+    {
+        left = n[i];
+        for(int k=0; k<log(n[i]+1)/log(2)-1; k++ )  // 1,2,4,8... 二进制分组
+        {
+            knapsack01(w[i]<<k, v[i]<<k);
+            left -= (1<<k);
+        }
+        knapsack01(w[i]*left, v[i]*left);
+    }
+    cout<<dp[W];
+    return 0;
+}
+//poj 1014
+#include <iostream>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#define ll long long
+using namespace std;
+#define MAX 20001
+int W;
+int N=6;
+int dp[6*MAX];
+void knapsack01(int w,int v)
+{
+    for(int j=W; j>=w; j--)  // 逆序迭代j以防止多次使用物品i
+    {
+        dp[j] = max(dp[j], dp[j-w]+v);
+    }
+}
+int main()
+{
+    int nums[7];
+    int cnt=1,left;
+    while(1)
+    {
+        W = 0;
+        memset(dp, 0, sizeof(dp));  // 忘了
+        for(int i=1; i<=N; i++)
+        {
+            scanf("%d", &nums[i]);
+            W += i*nums[i];
+        }
+        if(!W)
+            break;
+        if(W&1)
+        {
+            printf("Collection #%d:\nCan't be divided.\n\n", cnt++);
+            continue;
+        }
+        W /= 2;  //
+        for(int i=1; i<=N; i++)
+        {
+            left = nums[i];
+            for(int k=0; k<log(nums[i]+1)/log(2)-1; k++ )  // 1,2,4,8... 二进制分组
+            {
+                knapsack01(i<<k, i<<k);
+                left -= (1<<k);
+            }
+            knapsack01(i*left, i*left);
+        }
+        if(W == dp[W])  // 
+            printf("Collection #%d:\nCan be divided.\n\n", cnt++);
+        else
+            printf("Collection #%d:\nCan't be divided.\n\n", cnt++);
+    }
+    return 0;
+}
+
+
+
 
 
