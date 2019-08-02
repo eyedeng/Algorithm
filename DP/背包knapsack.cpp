@@ -109,6 +109,42 @@ int main()
     cout<<ans;
 	return 0;
 }
+// 记忆化递归
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+
+#define MAXN 3410
+#define MAXW 12881
+int w[MAXN];
+int v[MAXN];
+int mem[MAXN][MAXW];  // N*W  2d -> 1d?
+int r_knapsack01(int N,int W)  // 剩余物品数N,还能装的重量W
+{
+    cout<<N<<","<<W<<" : "<<mem[N][W]<<endl;
+    int &ret = mem[N][W];
+    if(ret != -1)
+        return ret;
+    if(N==0 || W<=0)
+        return ret = 0;
+    if(W < w[N])
+        return ret = r_knapsack01(N-1, W);
+    int case1 = r_knapsack01(N-1, W);  // not choose
+    int case2 = r_knapsack01(N-1, W-w[N]) + v[N];  // choose
+    return ret = max(case1, case2);
+}
+int main()
+{
+    int W;
+    int N;
+    cin>>N>>W;
+    for(int i=1; i<=N; i++)
+        scanf("%d%d", &w[i], &v[i]);
+    memset(mem, -1, sizeof(mem));
+    cout<<r_knapsack01(N, W)<<endl;
+    return 0;
+}
+
 
 // 完全背包 无限物品 luogu1616
 int dp[100010];  // dp[i]: 已用time=i时的总价值
