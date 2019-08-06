@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define M 100
+int recu(int n)  // n = 40(165580141)  O(2^n)
+{
+    if(n == 1 || n == 0)
+        return 1;
+    return recu(n-1) + recu(n-2);
+}
+ll no_recu(int n)
+{
+    ll fib[M] = {1,1};
+    for(int i=2; i<=n; i++)
+        fib[i] = fib[i-1] + fib[i-2];
+    return fib[n];
+}
+
+ll cache[M+1];
+ll make_table(int n)
+{
+    if(n == 0 || n == 1)    //先处理部分
+        return cache[n] = 1;
+
+    ll &ret = cache[n];   //引用 cache[n]值随ret改变、录入
+    if(ret != -1)       //已解过
+        return ret;
+    return ret = make_table(n-1) + make_table(n-2);
+}
+int main()
+{
+    memset(cache, -1, sizeof(cache));
+    cout<<make_table(M)<<endl;
+    return 0;
+}

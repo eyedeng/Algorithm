@@ -1,0 +1,67 @@
+vector<int> ans;
+void dfs(int n,int d,int N,int K)
+{
+    if(d == N)
+    {
+        cout<<n<<" ";
+        ans.push_back(n);
+        return;
+    }
+    //两个分支
+    if(n%10+K <= 9)
+    {
+        dfs(n*10 + (n%10)+K,d+1,N,K);
+    }
+    if(n%10-K >= 0 && K!=0)
+    {
+        dfs(n*10 + (n%10)-K,d+1,N,K);
+    }
+}
+vector<int> numsSameConsecDiff(int N, int K)
+{
+    if(N == 1)
+    {
+        for(int i=0; i<=9; i++)
+            ans.push_back(i);
+        return ans;
+    }
+    for(int i=1; i<=9; i++)
+    {
+        dfs(i,1,N,K);
+    }
+    return ans;
+}
+
+
+vector<int> numsSameConsecDiff_bfs(int N, int K)
+{
+    deque<int> q = {1,2,3,4,5,6,7,8,9};  //双端队列
+    if(N == 1)
+        q.push_front(0);   //可在头入队
+    N--;                //以上为第一位
+    while(N--)          //扩展剩余N-1位
+    {
+        int siz = q.size();
+        while(siz--)    //对于每个结点
+        {
+            int n = q.front();
+            q.pop_front();
+            if(n%10+K <= 9)
+            {
+                q.push_back(n*10 + (n%10)+K);
+            }
+            if(n%10-K >= 0 && K!=0)
+            {
+                q.push_back(n*10 + (n%10)-K);
+            }
+        }
+    }
+    return vector<int>(q.begin(),q.end());
+}
+
+int main()
+{
+    numsSameConsecDiff_bfs(3,7);
+    //numsSameConsecDiff(3,7);
+    return 0;
+}

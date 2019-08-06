@@ -1,0 +1,75 @@
+//poj 2362 正方形 
+#include<iostream>
+#include <algorithm>
+using namespace std;
+bool vis[25];
+int M,len[25];
+int L;
+bool dfs(int pos, int sum,int yes) //yes 参数 不能用全局
+{
+    if(yes == 3){ // 有3边就可以了
+        return 1;
+    }
+
+    for(int i=pos; i<M; i++)
+    {
+        if(vis[i])
+            continue;
+        vis[i] = 1;
+        if(sum + len[i] < L)
+        {
+            if(dfs(i+1,sum+len[i],yes))
+                return 1;  // yes==3后及时返回，否则进下一轮循环
+        }
+        else if(sum + len[i] == L)
+        {
+            //yes++;
+            if(dfs(0,0,yes+1))
+            {
+                return 1; // yes==3后及时返回
+            }
+
+        }
+        // > L 就i++ 看下一个短的
+        vis[i] = 0;
+    }
+    return 0;
+}
+bool comp(const int &a,const int &b)
+{
+    return a > b;
+}
+int main()
+{
+    int N;
+    cin>>N;
+    while(N--)
+    {
+        cin>>M;
+        int sum = 0;
+        for(int i=0; i<M; i++)
+        {
+            cin>>len[i];
+            sum += len[i];
+        }
+        L = sum/4;
+
+        sort(len, len+M,comp); //降序,越长组合越少
+        if(sum%4 != 0 || L < len[0])
+        {
+            cout<<"no\n";continue;
+        }
+        for(int i=0; i<M; i++)
+            vis[i] = 0;
+
+        if(dfs(0,0,0))
+        {
+            cout<<"yes\n";
+        }
+        else{
+            cout<<"no\n";
+        }
+    }
+    return 0;
+
+}

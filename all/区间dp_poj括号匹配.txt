@@ -1,0 +1,41 @@
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <cstdio>
+#include <queue>
+using namespace std;
+#define For(i, n) for(int i=0; i<n; i++)
+#define For1(i, n) for(int i=1; i<=n; i++)
+#define ll long long
+
+int main()
+{
+    char s[110];
+    int dp[110][110];  // dp[i][j]: i ~ j 的最大匹配长度
+    int len;
+    while(scanf("%s", s))
+    {
+        if(strcmp(s, "end") == 0)
+            break;
+        memset(dp, 0, sizeof(dp));
+        len = strlen(s);
+        for(int l = 2; l<=len; l++)  //枚举区间长度
+        {
+            for(int i=0; i<=len-l; i++)  //枚举匹配起点
+            {
+                int j = i + l -1;  // 终点即确定
+                if(s[i]=='('&&s[j]==')' || s[i]=='['&&s[j]==']')
+                {
+                    dp[i][j] = dp[i+1][j-1] + 2;
+                }
+                for(int k=i; k<j; k++)  //枚举间断点
+                {
+                    dp[i][j] = max(dp[i][j], dp[i][k]+dp[k+1][j]);
+                }
+            }
+        }
+        printf("%d\n", dp[0][len-1]);
+    }
+    return 0;
+}
+

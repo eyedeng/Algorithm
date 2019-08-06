@@ -1,0 +1,97 @@
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <cstdio>
+#include <vector>
+using namespace std;
+#define For(i, n) for(int i=0; i<n; i++)
+#define For1(i, n) for(int i=1; i<=n; i++)
+#define ll long long
+#define M 1000
+
+//leetcode
+int main()
+{
+    //cout<<longestPalindrome("babad");
+    char s[1010];
+    cin>>s;
+    int len = strlen(s);
+    int dp[1010];
+    memset(dp, 0, sizeof(dp));
+    for(int i=1; i<len-1; i++)  // position
+    {
+        for(int d=dp[i]; i+d+1<len && i-d-1>=0; d++)
+        {
+            int st = i-d-1;
+            int en = i+d+1;
+            if(s[st] == s[en])
+            {
+                dp[i]++;
+            }
+            else
+                break;
+        }
+    }
+//    for(int i=0; i<len; i++)
+//        cout<<dp[i]<<endl;
+    int max_ = 0, pos=0;  // 初始化，下面pos可能不被赋值
+    for(int i=0; i<len; i++)
+    {
+        if(dp[i] > max_)
+        {
+            max_ = dp[i];
+            pos = i;
+        }
+    }
+    //cout<<pos<<":"<<max_<<endl;
+    for(int i=0; i<len-1; i++)
+        if(s[i]==s[i+1])
+            dp[i] = 1;
+        else
+            dp[i] = 0;
+    for(int i=0; i<len-1; i++)  // position
+    {
+        if(!dp[i])
+            continue;
+        for(int d=dp[i]; i+d+1<len && i-d>=0; d++)
+        {
+            int st = i-d;
+            int en = i+d+1;
+            if(s[st] == s[en])
+            {
+                dp[i]++;
+            }
+            else
+                break;
+        }
+    }
+//    for(int i=0; i<len; i++)
+//        cout<<dp[i]<<endl;
+    int Flag = 1;
+    for(int i=0; i<len; i++)
+    {
+        if(dp[i] > max_)
+        {
+            max_ = dp[i];
+            pos = i;
+            Flag = 0;
+        }
+    }
+    //cout<<pos<<":"<<max_<<endl;
+    char ts[1010];
+    int cnt = 0;
+    if(Flag)
+    {
+        for(int i=pos-max_; i<=pos+max_; i++)
+            ts[cnt++] = s[i];
+        ts[cnt] = '\0';
+    }
+    else
+    {
+        for(int i=pos-max_+1; i<=pos+max_; i++)
+            ts[cnt++] = s[i];
+        ts[cnt] = '\0';
+    }
+    cout<<ts<<endl;
+    return 0;
+}

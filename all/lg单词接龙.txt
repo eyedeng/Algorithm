@@ -1,0 +1,74 @@
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <cstdio>
+using namespace std;
+#define For(i, n) for(int i=0; i<n; i++)
+#define ll long long
+
+const char str[8] = "yizhong";
+int n;
+char m[110][110];
+int vis[110][110];
+int path[7][2];
+int path_cnt;
+int dir[8][2] = { {-1,0},{1,0},{0,-1},{0,1},{-1,-1},{-1,1},{1,-1},{1,1} };
+void dfs(int x,int y,int Dir)  
+{
+    if(path_cnt == 7)
+    {
+        For(i, 7)
+            vis[ path[i][0] ][ path[i][1] ] = 1;
+        return;
+    }
+    int nx = x + dir[Dir][0];     // 方向唯一
+    int ny = y + dir[Dir][1];
+    if(nx>=0&&nx<n&&ny>=0&&ny<n)
+    {
+        //cout<<m[nx][ny]<<"="<<str[path_cnt]<<endl;
+        if(m[nx][ny]==str[path_cnt])
+        {
+            path[path_cnt][0] = nx;
+            path[path_cnt++][1] = ny;
+            dfs(nx, ny, Dir);
+            path_cnt--;  // 小心全局变量一直++
+        }
+    }
+}
+int main()
+{
+    memset(path, -1, sizeof(path));
+//    For(i, 7)
+//        path[i][0] = path[i][1] = -1;
+    cin>>n;
+    For(i, n)
+    {
+        scanf("%s",m[i]);
+    }
+    For(i, n)
+    {
+        For(j, n)
+        {
+            if(m[i][j] == 'y')
+            {
+                path_cnt = 0;
+                path[path_cnt][0] = i;
+                path[path_cnt++][1] = j;
+                For(d, 8)
+                    dfs(i,j,d);
+            }
+        }
+    }
+    For(i, n)
+    {
+        For(j, n)
+        {
+            if(vis[i][j])
+                putchar(m[i][j]);
+            else
+                putchar('*');
+        }
+        putchar('\n');
+    }
+    return 0;
+}

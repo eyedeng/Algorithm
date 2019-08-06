@@ -1,0 +1,35 @@
+// minimax dp º«“‰ªØµ›πÈ
+#include <iostream>
+#include <string.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+vector<int> cache;
+bool canWin(int n)
+{
+    if(n==1)
+        return false;
+//    if(cache[n] != -1)
+//        return cache[n];
+    bool win = false;
+    for(int i=1; i<=n/2; i++)
+        if(n%i == 0)
+            win |= !canWin(n-i);
+    return cache[n] = win;
+}
+bool divisorGame(int N)
+{
+    cache = vector<int>(N+1, -1);
+    return canWin(N);
+}
+
+int main()
+{
+    int n;
+    while(cin>>n)
+    {
+        cout<<divisorGame(n)<<endl;
+    }
+
+    return 0;
+}

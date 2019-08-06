@@ -1,0 +1,30 @@
+int adj[26][26];
+bool visited[26];
+vector<int> order;
+void dfs(int here)
+{
+    cout<<"DFS visited "<<(char)(here+'a')<<endl;
+    visited[here] = true;
+    for(int there=0; there<26; there++)
+    {
+        if(adj[here][there] && !visited[there])
+            dfs(there);
+    }
+    order.push_back(here);  //ºóÐò
+}
+void topo_orde()
+{
+    memset(visited, 0, sizeof(visited));
+
+    for(int i=0; i<26; i++)
+    {
+
+        if(!visited[i])
+            dfs(i);
+
+    }
+    reverse(order.begin(), order.end());
+    for(int i:order)
+        cout<<(char)(i+'a');
+
+}

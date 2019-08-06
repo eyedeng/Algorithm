@@ -1,0 +1,57 @@
+//https://leetcode.com/problems/coin-change/ 经典
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
+#include <queue>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int coinChange_dp(vector<int>& coins,int amount)
+{
+    vector<int> dp(amount+1,10000000);  //dp[amount] = min coins
+    dp[0] = 0;
+    for(int coin_i:coins)
+    {
+        for(int j=coin_i; j<=amount; j++)
+        {
+            dp[j] = min(dp[j],dp[j-coin_i]+1); // take coin i?
+        }
+    }
+    if(dp[amount] < 10000000)
+        return dp[amount];
+    return -1;
+}
+
+void dfs(vector<int>& coins,int s,int amt,int cnt,int &ans)
+{
+    int coin = coins[s];
+
+    if(s == coins.size()-1)  //最后一枚
+    {
+        if(amt%coin == 0)
+        {
+            ans = min(ans, cnt + amt/coin);
+        }
+        return;
+    }
+
+    for(int i=amt/coin; i>=0 && cnt+i<ans; i--)  //尝试此硬币不同个数 >=ans剪枝
+    {
+        dfs(coins,s+1,amt-i*coin,cnt+i,ans);
+    }
+}
+int coinChange_dfs(vector<int>& coins,int amount)
+{
+    sort(coins.rbegin(),coins.rend());  // 贪心，从大金币试起
+    int ans = amount+1;
+    dfs(coins,0,amount,0,ans);
+    return ans==amount+1 ? -1:ans;
+}
+int main()
+{
+    vector<int> v = {83,186,408,419};
+    //cout<<coinChange(v,6249);
+    return 0;
+}
+
+
