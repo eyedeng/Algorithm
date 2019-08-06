@@ -135,3 +135,112 @@ ListNode* mergeKLists(vector<ListNode*>& lists)
 
 }
 ```
+
+链表的归并排序
+```cpp
+// leetcode 148
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+ListNode* creat()
+{
+    int v;
+    ListNode* h = new ListNode(0);
+    ListNode* tail = h;
+    for(int i=0; i<4; i++)
+    {
+        scanf("%d", &v);
+        ListNode* t = new ListNode(v);
+        tail->next = t;
+        tail = t;
+    }
+    tail->next = nullptr;
+    return h;
+}
+void pr2(ListNode* head)
+{
+    ListNode* h = head->next;
+    ListNode* fasth = h->next;
+    while(fasth)
+    {
+        cout<<h->val<<"-"<<fasth->val<<endl;
+        h = h->next;
+        fasth = fasth->next;
+        if(!fasth)
+            break;
+        fasth = fasth->next;
+    }
+    putchar('\n');
+}
+void pr(ListNode* h1)
+{
+    ListNode* n1 = h1->next;
+    while(n1)
+    {
+        cout<<n1->val<<" ";
+        n1 = n1->next;
+    }
+    putchar('\n');
+}
+void prswap(ListNode* h1,ListNode* h2)
+{
+    ListNode* n1 = h1->next;
+    ListNode* n2 = h2->next;
+    swap(n1, n2);
+    while(n1 && n2)
+    {
+        cout<<n1->val<<"-"<<n2->val<<endl;
+        n1 = n1->next;
+        n2 = n2->next;
+    }
+    putchar('\n');
+}
+
+
+
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &dummy;  // = 地址
+    while(l1 && l2)
+    {
+        if(l1->val > l2->val)
+            swap(l1, l2);       // 相当于整个list交换
+        tail->next = l1;
+        tail = tail->next;
+        l1 = l1->next;
+    }
+    if(l1)
+        tail->next = l1;
+    if(l2)
+        tail->next = l2;
+    return dummy.next;
+}
+
+ListNode* sortList(ListNode* head) {
+
+    if(!head || !head->next)
+        return head;
+
+    ListNode* slow = head;       // 快慢指针 --> 中点
+    ListNode* fast = head->next;
+    while(fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode* mid = slow->next;  // 左链表的尾:slow 右链表的头:mid
+    slow->next = nullptr;        // 分开
+    return mergeTwoLists( sortList(head), sortList(mid) );  // 回溯时合并两有序链表
+}
+int main()
+{
+    ListNode* h1 = creat();
+    h1 = sortList(h1);
+    pr(h1);
+    return 0;
+}
+```
+对链表自底向上(Buttom up): space -> O(1)
+ 
