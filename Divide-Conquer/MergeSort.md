@@ -1,4 +1,5 @@
-![1](../images/2.jpg)  
+![1](../images/2.jpg) 
+### 归并排序
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -57,7 +58,7 @@ int main()
 }
 ```
 
-衍生：合并k个有序链表  
+### 衍生：合并k个有序链表  
 ![2](../images/1.PNG)
 ```cpp
 // leetcode 23
@@ -136,7 +137,7 @@ ListNode* mergeKLists(vector<ListNode*>& lists)
 }
 ```
 
-链表的归并排序
+### 链表的归并排序
 ```cpp
 // leetcode 148
 struct ListNode {
@@ -242,5 +243,65 @@ int main()
     return 0;
 }
 ```
-对链表自底向上(Buttom up): space -> O(1)
+
+### 对链表自底向上(Buttom up): space -> O(1)  
+_占位符_  
+
+### 求逆序数
+```cpp
+// leetcode 775 merge时顺便计算逆序数
+int Merge(vector<int>& arr,int l,int mid,int r,vector<int>& temp)
+{
+    int inv = 0;
+    int iL = l,iR = mid;
+    int jL = mid+1,jR = r;
+    int cnt = 0;
+    while( iL<=iR && jL<=jR )
+    {
+        if( arr[iL]<arr[jL] )
+        {
+            temp[cnt++] = arr[iL++];
+        }
+        else
+        {
+            temp[cnt++] = arr[jL++];
+            inv += iR - iL + 1;  // 此+后面 的个数
+                                 // inv 仅在此产生
+        }
+    }
+    while( iL<=iR )
+        temp[cnt++] = arr[iL++];
+    while( jL<=jR )
+        temp[cnt++] = arr[jL++];
+
+    for( int i=0; i<cnt; i++) //修改原数组
+        arr[l+i] = temp[i];
+    return inv;
+}
+int Sort(vector<int>& arr,int l,int r,vector<int>& temp)
+{
+    int inv_l=0,inv_r=0,inv_cur=0;
+    if( l<r )   //分到 只剩一个元素时，数组有序
+    {
+        int mid = (l+r) / 2;
+        inv_l = Sort(arr,l,mid,temp);
+        inv_r = Sort(arr,mid+1,r,temp);
+        inv_cur = Merge(arr,l,mid,r,temp);  //将两个有序数列合并
+        return inv_l+inv_r+inv_cur;
+    }
+    return 0;  // l >= r  初始inl,inr = 0
+}
+bool isIdealPermutation(vector<int>& A)
+{
+    int len = A.size();
+    int loc = 0;
+    for(int i=0; i<len-1; i++)
+        if(A[i]>A[i+1])
+            loc++;
+    vector<int> temp(len);
+    return loc == Sort(A, 0, len-1, temp);
+}
+```
+
+
  
