@@ -29,17 +29,17 @@ int dfs(int root,int flag)
         ret = ri[root];
         for(int i=0; i<fa[root].size(); i++)
         {
-            dp[root][1] += dfs(fa[root][i], 0);
+            ret += dfs(fa[root][i], 0);
         }
-        return ret = dp[root][1];
+        return ret;
     }
     else
     {
         for(int i=0; i<fa[root].size(); i++)
         {
-            dp[root][0] += max(dfs(fa[root][i], 0), dfs(fa[root][i], 1));
+            ret += max(dfs(fa[root][i], 0), dfs(fa[root][i], 1));
         }
-        return ret = dp[root][0];
+        return ret;
     }
 
 
@@ -67,8 +67,6 @@ int main()
             //cout<<dp[i][0]<<","<<dp[i][1];
             break;
         }
-
     return 0;
 }
-
 
